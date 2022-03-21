@@ -7,6 +7,9 @@ Module Code: **ECS794P**
 
 Module Leader: **Lorenzo Jamone**
 
+Student Name: Alexander Sworski
+Student ID: 210456914
+
 Semester: **2**
 
 Submission Date: **22th March 2022**
@@ -16,3 +19,10 @@ Submission Date: **22th March 2022**
 ## Task
 The objective of this Mid-term Test (10% of your final exam mark) is to create a ROS package that simulates a simple computational model of social human-robot interaction.
 
+## Manual
+
+### SETUP
+
+### DESCRIPTION
+
+### OPTIONS
