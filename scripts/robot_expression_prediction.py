@@ -1,60 +1,106 @@
 #!/usr/bin/env python
-# Software License Agreement (BSD License)
-#
-# Copyright (c) 2008, Willow Garage, Inc.
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-# POSSIBILITY OF SUCH DAMAGE.
-#
-# Revision $Id$
 
-## Simple talker demo that listens to std_msgs/Strings published 
-## to the 'chatter' topic
-
+from cr_week8_test.srv import predict_robot_expression,predict_robot_expressionResponse
 import rospy
-from std_msgs.msg import String
+from bayesian.bbn import *
 
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
 
-def listener():
+def fHappy(HE, HA, O):
+    '''happy'''
+    table = dict()
+    table['111'] = 0.8
+    table['112'] = 1
+    table['121'] = 0.8
+    table['122'] = 1
+    table['131'] = 0.6
+    table['132'] = 0.8
+    table['211'] = 0
+    table['212'] = 0
+    table['221'] = 0
+    table['222'] = 0.1
+    table['231'] = 0
+    table['232'] = 0.2
+    table['311'] = 0.7
+    table['312'] = 0.8
+    table['321'] = 0.8
+    table['322'] = 0.9
+    table['331'] = 0.6
+    table['332'] = 0.7
+    key = ''+ HE + HA + O
+    return table[key]
 
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
 
-    rospy.Subscriber('chatter', String, callback)
+def fNeutral(HE, HA, O):
+    '''neutral'''
+    table = dict()
+    table['111'] = 
+    table['112'] = 
+    table['121'] = 
+    table['122'] = 
+    table['131'] = 
+    table['132'] = 
+    table['211'] = 
+    table['212'] = 
+    table['221'] = 
+    table['222'] = 
+    table['231'] = 
+    table['232'] = 
+    table['311'] = 
+    table['312'] = 
+    table['321'] = 
+    table['322'] = 
+    table['331'] = 
+    table['332'] = 
+    key = ''+ HE + HA + O
+    return table[key]
 
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+
+def fSad(HE, HA, O):
+    '''Sad'''
+    table = dict()
+    table['111'] = 
+    table['112'] = 
+    table['121'] = 
+    table['122'] = 
+    table['131'] = 
+    table['132'] = 
+    table['211'] = 
+    table['212'] = 
+    table['221'] = 
+    table['222'] = 
+    table['231'] = 
+    table['232'] = 
+    table['311'] = 
+    table['312'] = 
+    table['321'] = 
+    table['322'] = 
+    table['331'] = 
+    table['332'] = 
+    key = ''+ HE + HA + O
+    return table[key]
+
 
 if __name__ == '__main__':
-    listener()
+    g = build_bbn(fHappy, fNeutral, fSad)
+    g.q()
+    g.q(P='high')
+    g.q(D=True)
+    g.q(S=True)
+    g.q(C=True, S=True)
+    g.q(D=True, S=True)
+    rospy.spin()
+
+def handle_predict_robot_expression(input):
+    RESULT = predict_robot_expressionResponse()
+    RESULT.p_happy = 
+    RESULT.p_neutral =
+    RESULT.p_sad =
+    return RESULT
+   
+def predict_robot_expression_server():
+    rospy.init_node('predict_robot_expression_server')
+    s = rospy.Service('predict_robot_expression', predict_robot_expression, handle_predict_robot_expression)
+    rospy.spin()
+   
+if __name__ == "__main__":
+    predict_robot_expression_server()

@@ -8,8 +8,9 @@ import random
 COUNTER = 1
 
 def interaction_generator():
-    pub1 = rospy.Publisher('human_info_G', human_info)
-    pub2 = rospy.Publisher('object_info_G', object_info)
+    global COUNTER
+    pub1 = rospy.Publisher('human_info_G', human_info, queue_size=1)
+    pub2 = rospy.Publisher('object_info_G', object_info, queue_size=1)
     rospy.init_node('interaction_generator', anonymous=True)
     rate = rospy.Rate(0.1)
     while not rospy.is_shutdown():
