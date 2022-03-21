@@ -20,7 +20,7 @@ def callback(hdata, odata):
 
 
 def listener():
-    rospy.init_node('filter', anonymous=True)
+    rospy.init_node('pf', anonymous=True)
     sub_1 = message_filters.Subscriber('human_info_G', human_info)
     sub_2 = message_filters.Subscriber('object_info_G', object_info)
     ts = message_filters.ApproximateTimeSynchronizer([sub_1, sub_2], 1, 1, allow_headerless=True)

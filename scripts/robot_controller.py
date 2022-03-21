@@ -1,23 +1,38 @@
 #!/usr/bin/env python
 
+import sys
 import rospy
-from cr_week8_test.msg import perceived_info
+from cr_week8_test.msg import perceived_info, robot_info
 import random
+from cr_week8_test.srv import *
+from bayesian_belief_networks.msg import Result
+from bayesian_belief_networks.srv import Query
 
-def callback(hdata, odata):
+def callback(data):
     global pub
-    FILTER = random.randint(1,8)
-    p_info = perceived_info()
-    p_info.human_action = hdata.human_action if not (FILTER == 2 or FILTER == 4 or FILTER == 6 or FILTER == 7) else 0
-    p_info.human_expression = hdata.human_expression if not (FILTER == 3 or FILTER == 5 or FILTER == 6 or FILTER == 7) else 0
-    p_info.object_size = odata.object_size if not (FILTER == 1 or FILTER == 4 or FILTER == 5 or FILTER == 7) else 0
-    p_info.id = hdata.id
-    pub.publish(p_info)
+    rospy.wait_for_service('/predict_robot_expression_sev')
+    try:
+        req = predict_robot_expressionRequest()
+        req.human_action = data.human_action
+        req.human_expression = data.human_expression
+        req.object_size = data.object_size
+        predict_robot_expression_prox = rospy.ServiceProxy('/predict_robot_expression_sev', predict_robot_expression)
+        resp = predict_robot_expression_prox(req)
+        r_info = robot_info()
+        r_info.id = data.id
+        r_info.p_happy = resp.p_happy
+        r_info.p_sad = resp.p_sad
+        r_info.p_neutral = resp.p_neutral
+        rospy.loginfo(r_info)
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+        
 
 def listener():
-    rospy.init_node('filter', anonymous=True)
+    rospy.init_node('rc', anonymous=True)
     rospy.Subscriber('perceived_info_G', perceived_info, callback,queue_size=1)
     rospy.spin()
+
 
 if __name__ == '__main__':
     listener()

@@ -11,7 +11,7 @@ def interaction_generator():
     global COUNTER
     pub1 = rospy.Publisher('human_info_G', human_info, queue_size=1)
     pub2 = rospy.Publisher('object_info_G', object_info, queue_size=1)
-    rospy.init_node('interaction_generator', anonymous=True)
+    rospy.init_node('ig', anonymous=True)
     rate = rospy.Rate(0.1)
     while not rospy.is_shutdown():
         hinfo = human_info()
