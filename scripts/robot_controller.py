@@ -8,15 +8,17 @@ from cr_week8_test.srv import *
 from bayesian_belief_networks.msg import Result
 from bayesian_belief_networks.srv import Query
 
+
+
+
 def callback(data):
-    global pub
-    rospy.wait_for_service('/predict_robot_expression_sev')
+    predict_robot_expression_prox = rospy.ServiceProxy('predict_robot_expression_sev', predict_robot_expression)
+    rospy.wait_for_service('predict_robot_expression_sev')
     try:
         req = predict_robot_expressionRequest()
         req.human_action = data.human_action
         req.human_expression = data.human_expression
         req.object_size = data.object_size
-        predict_robot_expression_prox = rospy.ServiceProxy('/predict_robot_expression_sev', predict_robot_expression)
         resp = predict_robot_expression_prox(req)
         r_info = robot_info()
         r_info.id = data.id
