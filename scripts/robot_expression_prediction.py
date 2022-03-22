@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from cr_week8_test.srv import *
+from cr_week8_test.srv import predict_robot_expression, predict_robot_expressionResponse
 import rospy
 from bayesian_belief_networks.ros_utils import *
 
@@ -13,7 +13,7 @@ def fAction(HA):
 def fExpression(HE):
     return 1.0/3
 
-def fHappy(HE, HA, O, M):
+def fAll(HE, HA, O, M):
     '''happy'''
     table = dict()
     table['111H'] = 0.8
@@ -77,11 +77,11 @@ def fHappy(HE, HA, O, M):
 
 
 def handle_predict_robot_expression(input):
-    g = ros_build_bbn(fSize,fAction,fExpression,fHappy,domains=dict(HE=['1','2','3'],HA=['1','2','3'],O=['1','2'],M=['H','N','S']))
-    RESULT = predict_robot_expressionResponse()
-    ha = input.human_action = 0
-    he = input.human_expression = 1
-    o = input.object_size = 0
+    g = ros_build_bbn(fSize,fAction,fExpression,fAll,domains=dict(HE=['1','2','3'],HA=['1','2','3'],O=['1','2'],M=['H','N','S']))
+
+    ha = input.human_action
+    he = input.human_expression
+    o = input.object_size
     
     if(ha == 0 and he == 0 and o == 0):
         q = g.query()
@@ -99,11 +99,7 @@ def handle_predict_robot_expression(input):
         q = g.query(HE = str(he),HA = str(ha))
     else:
         q = g.query(O = str(o),HE = str(he),HA = str(ha))
-
-    RESULT.p_happy = q.get(('M','H'))
-    RESULT.p_neutral = q.get(('M','N'))
-    RESULT.p_sad = q.get(('M','S'))
-    return RESULT
+    return predict_robot_expressionResponse(p_happy = q.get(('M','H')),p_neutral = q.get(('M','N')),p_sad = q.get(('M','S')))
    
    
 if __name__ == "__main__":
