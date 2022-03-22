@@ -5,12 +5,12 @@ from cr_week8_test.msg import human_info
 from cr_week8_test.msg import object_info
 import random
 
-COUNTER = 1
+COUNTER = 0
 
 def interaction_generator():
     global COUNTER
-    pub1 = rospy.Publisher('human_info_G', human_info, queue_size=1)
-    pub2 = rospy.Publisher('object_info_G', object_info, queue_size=1)
+    pub1 = rospy.Publisher('human_info_G', human_info, queue_size=10)
+    pub2 = rospy.Publisher('object_info_G', object_info, queue_size=10)
     rospy.init_node('ig', anonymous=True)
     rate = rospy.Rate(0.1)
     while not rospy.is_shutdown():

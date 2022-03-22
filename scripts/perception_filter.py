@@ -6,7 +6,7 @@ from cr_week8_test.msg import perceived_info
 import random
 import message_filters
 
-pub = rospy.Publisher('perceived_info_G', perceived_info, queue_size=1)
+pub = rospy.Publisher('perceived_info_G', perceived_info, queue_size=10)
 
 def callback(hdata, odata):
     global pub
@@ -23,7 +23,7 @@ def listener():
     rospy.init_node('pf', anonymous=True)
     sub_1 = message_filters.Subscriber('human_info_G', human_info)
     sub_2 = message_filters.Subscriber('object_info_G', object_info)
-    ts = message_filters.ApproximateTimeSynchronizer([sub_1, sub_2], 1, 1, allow_headerless=True)
+    ts = message_filters.ApproximateTimeSynchronizer([sub_1, sub_2], queue_size = 10, slop = 1, allow_headerless=True)
     ts.registerCallback(callback)
     rospy.spin()
 
