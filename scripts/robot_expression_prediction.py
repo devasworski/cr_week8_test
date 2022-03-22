@@ -76,9 +76,10 @@ def fAll(HE, HA, O, M):
     return table[key]
 
 
-def handle_predict_robot_expression(input):
-    g = ros_build_bbn(fSize,fAction,fExpression,fAll,domains=dict(HE=['1','2','3'],HA=['1','2','3'],O=['1','2'],M=['H','N','S']))
+g = ros_build_bbn(fSize,fAction,fExpression,fAll,domains=dict(HE=['1','2','3'],HA=['1','2','3'],O=['1','2'],M=['H','N','S']))
 
+def handle_predict_robot_expression(input):
+    global g
     ha = input.human_action
     he = input.human_expression
     o = input.object_size
