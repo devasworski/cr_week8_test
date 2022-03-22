@@ -50,4 +50,4 @@ Consider a social humanoid robot sitting at a table in front of a human child. A
 
 ### Knows Issues:
 1. The `robot_expression_prediction` service does interrupt after one serice request, leaving the project to show only the robot interpretation of the first scenario.
-2. The scenario with the ID 1 is not listed to by the subscribers, therfore the first scenario processed and interpreted by the robot has the ID 2.
+2. The scenario with the ID 1 is not listed to by the `perception_filter`node, therfore the first scenario processed and interpreted by the robot has the ID 2. The issue arises from the usage of the `ApproximateTimeSynchronizer` which syncronises the incoming `human_info` publisher and the `object_info` publisher. The synconisation during initialisation seems to always fail.
