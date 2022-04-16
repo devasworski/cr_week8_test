@@ -15,7 +15,7 @@ Semester: **2**
 
 Submission Date: **22th March 2022**
 
-#### Final Grade: ??
+#### Final Grade: 100/100 (Distinction)
 
 ## Task
 The objective of this Mid-term Test (10% of your final exam mark) is to create a ROS package that simulates a simple computational model of social human-robot interaction.
